@@ -17,35 +17,31 @@ import com.giulia.service.UsuarioService;
 @RequestMapping("/api/usuarios")
 public class UsuarioController {
 
-    private UsuarioService service;
+	private UsuarioService service;
 
-    private UsuarioController(UsuarioService service) {
-        this.service = service;
-    }
+	private UsuarioController(UsuarioService service) {
+		this.service = service;
+	}
 
+	@PostMapping("/autenticar")
+	public ResponseEntity<Object> autenticar(@RequestBody UsuarioDto dto) {
+		try {
+			Usuario usuarioAutenticado = service.autenticar(dto.getEmail(), dto.getSenha());
+			return ResponseEntity.ok(usuarioAutenticado);
+		} catch (ErroAutenticacao e) {
+			return ResponseEntity.badRequest().body(e.getMessage());
+		}
+	}
 
-    @PostMapping("/autenticar")
-    public ResponseEntity<Object> autenticar(@RequestBody UsuarioDto dto) {
-        try {
-            Usuario usuarioAutenticado = service.autenticar(dto.getEmail(), dto.getSenha());
-            return ResponseEntity.ok(usuarioAutenticado);
-        } catch (ErroAutenticacao e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
-        
-        
-    }
-
-    @PostMapping("/cadastrar")
-    public ResponseEntity<Object> salvar(@RequestBody UsuarioDto dto) {
-        Usuario usuario = Usuario.builder().nome(dto.getNome()).senha(dto.getSenha()).email(dto.getEmail()).build();
-        try {
-            Usuario salvo = service.salvarUsuario(usuario);
-            return new ResponseEntity<Object>(salvo, HttpStatus.CREATED);
-        } catch (RegraNegocioException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
-    }
-
+	@PostMapping("/cadastrar")
+	public ResponseEntity<Object> salvar(@RequestBody UsuarioDto dto) {
+		Usuario usuario = Usuario.builder().nome(dto.getNome()).senha(dto.getSenha()).email(dto.getEmail()).build();
+		try {
+			Usuario salvo = service.salvarUsuario(usuario);
+			return new ResponseEntity<Object>(salvo, HttpStatus.CREATED);
+		} catch (RegraNegocioException e) {
+			return ResponseEntity.badRequest().body(e.getMessage());
+		}
+	}
 
 }
