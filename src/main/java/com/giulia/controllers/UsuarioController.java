@@ -32,6 +32,8 @@ public class UsuarioController {
         } catch (ErroAutenticacao e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
+        
+        
     }
 
     @PostMapping("/cadastrar")
