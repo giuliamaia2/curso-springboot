@@ -33,6 +33,8 @@ public class UsuarioController {
 		}
 	}
 
+	
+	
 	@PostMapping("/cadastrar")
 	public ResponseEntity<Object> salvar(@RequestBody UsuarioDto dto) {
 		Usuario usuario = Usuario.builder().nome(dto.getNome()).senha(dto.getSenha()).email(dto.getEmail()).build();
