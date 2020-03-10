@@ -3,6 +3,7 @@ package com.giulia.service.impl;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
@@ -65,6 +66,11 @@ public class LancamentoServiceImp implements LancamentoService {
 		lancamento.setStatus(status);
 		atualizar(lancamento);
 	}
+	
+	@Override
+	public Optional<Lancamento> obterPorId(Long id) {
+		return repository.findById(id);
+	}
 
 	@Override
 	public void validar(Lancamento lancamento) {
@@ -95,5 +101,6 @@ public class LancamentoServiceImp implements LancamentoService {
 		}
 
 	}
+
 
 }
