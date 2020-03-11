@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.giulia.dto.AtualizaStatusDto;
 import com.giulia.dto.LancamentoDto;
 import com.giulia.exception.RegraNegocioException;
 import com.giulia.model.entity.Lancamento;
@@ -33,6 +34,29 @@ public class LancamentoController {
 
 	private final LancamentoService service;
 	private final UsuarioService usuarioService;
+
+	@PutMapping("/atualizar-status/{id}")
+	public ResponseEntity atualizarStatus(@PathVariable("id") Long id, @RequestBody AtualizaStatusDto dto) {
+		return service.obterPorId(id).map( entity -> {
+			
+			StatusLancamento statusSelecionado = StatusLancamento.valueOf(dto.getStatus());
+			
+			if (statusSelecionado == null) {
+				return ResponseEntity.badRequest().body("Status inválido!");
+			}
+			
+			try {
+				entity.setStatus(statusSelecionado);
+				service.atualizar(entity);
+				return ResponseEntity.ok(entity);
+
+			} catch (Exception e) {
+				return ResponseEntity.badRequest().body(e.getMessage());
+			}
+		}).orElseGet(
+				() -> new ResponseEntity<Object>("Lançamento não encontrado na base de dados", HttpStatus.BAD_REQUEST));
+
+	}
 
 	@GetMapping("/buscar")
 	public ResponseEntity<Object> buscar(@RequestParam(value = "descricao", required = false) String descricao,
