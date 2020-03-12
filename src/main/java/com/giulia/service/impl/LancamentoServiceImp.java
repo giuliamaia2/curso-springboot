@@ -90,7 +90,7 @@ public class LancamentoServiceImp implements LancamentoService {
 		}
 
 		if (lancamento.getUsuario() == null || lancamento.getUsuario().getId() == null) {
-			throw new RegraNegocioException("Informa um Usuário");
+			throw new RegraNegocioException("Informe um Usuário");
 		}
 
 		if (lancamento.getValor() == null || lancamento.getValor().compareTo(BigDecimal.ZERO) < 1) {
